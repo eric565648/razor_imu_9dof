@@ -39,6 +39,7 @@ from tf.transformations import quaternion_from_euler
 from dynamic_reconfigure.server import Server
 from razor_imu_9dof.cfg import imuConfig
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
+from geometry_msgs.mgs import MagneticField
 
 degrees2rad = math.pi/180.0
 imu_yaw_calibration = 0.0
@@ -55,11 +56,13 @@ def reconfig_callback(config, level):
 rospy.init_node("razor_node")
 #We only care about the most recent measurement, i.e. queue_size=1
 pub = rospy.Publisher('imu', Imu, queue_size=1)
+pub_mag = rospy.Publisher('mag', MagneticField, queue_size=1)
 srv = Server(imuConfig, reconfig_callback)  # define dynamic_reconfigure callback
 diag_pub = rospy.Publisher('diagnostics', DiagnosticArray, queue_size=1)
 diag_pub_time = rospy.get_time();
 
 imuMsg = Imu()
+magMsg = MagneticField()
 
 # Orientation covariance estimation:
 # Observed orientation noise: 0.3 degrees in x, y, 0.6 degrees in z
@@ -220,7 +223,7 @@ rospy.loginfo("Publishing IMU data...")
 
 while not rospy.is_shutdown():
     line = ser.readline()
-    line = line.replace("#YPRAG=","")   # Delete "#YPRAG="
+    line = line.replace("#YPRAGM=","")   # Delete "#YPRAGM="
     #f.write(line)                     # Write to the output log file
     words = string.split(line,",")    # Fields split
     if len(words) > 2:
@@ -249,6 +252,13 @@ while not rospy.is_shutdown():
         #in AHRS firmware z axis points down, in ROS z axis points up (see REP 103) 
         imuMsg.angular_velocity.z = -float(words[8])
 
+        # don't know the orientation yet
+        magMsg.magnetic_field.x = float(words[9])
+        magMsg.magnetic_field.y = float(words[10])
+        magMsg.magnetic_field.z = float(words[11])
+
+
+
     q = quaternion_from_euler(roll,pitch,yaw)
     imuMsg.orientation.x = q[0]
     imuMsg.orientation.y = q[1]
@@ -259,6 +269,9 @@ while not rospy.is_shutdown():
     imuMsg.header.seq = seq
     seq = seq + 1
     pub.publish(imuMsg)
+
+    magMsg.header = imuMsg.header
+    pub_mag.publish(magMsg)
 
     if (diag_pub_time < rospy.get_time()) :
         diag_pub_time += 1
