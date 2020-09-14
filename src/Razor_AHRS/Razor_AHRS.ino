@@ -208,7 +208,7 @@
 // Select your hardware here by uncommenting one line!
 //#define HW__VERSION_CODE 10125 // SparkFun "9DOF Razor IMU" version "SEN-10125" (HMC5843 magnetometer)
 //#define HW__VERSION_CODE 10736 // SparkFun "9DOF Razor IMU" version "SEN-10736" (HMC5883L magnetometer)
-//#define HW__VERSION_CODE 14001 // SparkFun "9DoF Razor IMU M0" version "SEN-14001"
+#define HW__VERSION_CODE 14001 // SparkFun "9DoF Razor IMU M0" version "SEN-14001"
 //#define HW__VERSION_CODE 10183 // SparkFun "9DOF Sensor Stick" version "SEN-10183" (HMC5843 magnetometer)
 //#define HW__VERSION_CODE 10321 // SparkFun "9DOF Sensor Stick" version "SEN-10321" (HMC5843 magnetometer)
 //#define HW__VERSION_CODE 10724 // SparkFun "9DOF Sensor Stick" version "SEN-10724" (HMC5883L magnetometer)
@@ -467,6 +467,7 @@ int gyro_num_samples = 0;
 float MAG_Heading = 0;
 float Accel_Vector[3]= {0, 0, 0}; // Store the acceleration in a vector
 float Gyro_Vector[3]= {0, 0, 0}; // Store the gyros turn rate in a vector
+float Mag_Vector[3] = {0, 0, 0};
 float Omega_Vector[3]= {0, 0, 0}; // Corrected Gyro_Vector data
 float Omega_P[3]= {0, 0, 0}; // Omega Proportional correction
 float Omega_I[3]= {0, 0, 0}; // Omega Integrator

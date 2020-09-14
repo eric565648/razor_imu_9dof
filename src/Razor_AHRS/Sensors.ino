@@ -192,6 +192,10 @@ void Euler_angles_only_DMP_M0(void)
 	Accel_Vector[1] = accel[1];
 	Accel_Vector[2] = accel[2];
 
+  Mag_Vector[0] = magnetom[0];
+  Mag_Vector[0] = magnetom[1];
+  Mag_Vector[0] = magnetom[2];
+
 	imu.computeEulerAngles();
 
 	// Convert from NWU to NED...

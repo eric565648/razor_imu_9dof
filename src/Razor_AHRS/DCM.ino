@@ -81,6 +81,10 @@ void Matrix_update(void)
   Accel_Vector[0]=accel[0];
   Accel_Vector[1]=accel[1];
   Accel_Vector[2]=accel[2];
+
+  Mag_Vector[0]=magnetom[0];
+  Mag_Vector[0]=magnetom[1];
+  Mag_Vector[0]=magnetom[2];
     
   Vector_Add(&Omega[0], &Gyro_Vector[0], &Omega_I[0]);  //adding proportional term
   Vector_Add(&Omega_Vector[0], &Omega[0], &Omega_P[0]); //adding Integrator term
